@@ -19,10 +19,7 @@ app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({ extended: true }));
 
 
-// app.get('/', function(req, res){
-//   res.render('/client/app/index.html');
 
-// });
 var from;
 var to;
 var messages;
@@ -40,7 +37,7 @@ app.post('/send', function(req, res){
   
 
 
-  if(from&&to&&messages&&mediaUrl){
+  if(from&&to&&messages && mediaUrl){
    client.messages.create({ 
      to: "+"+to, 
      from: "+"+from, 
@@ -55,16 +52,9 @@ app.post('/send', function(req, res){
        res.end()
      }
      
- });   
-  }
- 
-
-
-  });
-
-
-
- 
+    });   
+  } 
+});
 
 
 app.listen(8080, function(err){
@@ -76,26 +66,3 @@ app.listen(8080, function(err){
 
 
 
-// client.sms.shortCodes("SC6b20cb705c1e8f00210049b20b70fce2").get(function(err, shortCode) {
-//     console.log(shortCode.shortCode);
-// });
-
-// client.sendMessage({
-//     //to:'+7148550762', 
-//     to:'+4085200843', // Any number Twilio can deliver to
-//     from: '+5627624447', // A number you bought from Twilio and can use for outbound communication
-//     body: 'word to your mother.' // body of the SMS message
-
-// }, function(err, responseData) { //this function is executed when a response is received from Twilio
-
-//     if (!err) { // "err" is an error received during the request, if any
-
-//         // "responseData" is a JavaScript object containing data received from Twilio.
-//         // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
-//         // http://www.twilio.com/docs/api/rest/sending-sms#example-1
-
-//         console.log(responseData.from); // outputs "+14506667788"
-//         console.log(responseData.body); // outputs "word to your mother."
-
-//     }
-// });
