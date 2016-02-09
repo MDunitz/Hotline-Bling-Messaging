@@ -13,33 +13,57 @@ app.controller('formCtrl', function($scope, $http) {
     }), function(response){
       console.log('error')
     };
-  var config = {
-             headers : {
-                 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-             }
-         }
-   var data = $.param({
-               to: $scope.user.to,
-               from: $scope.user.from,
-               body: $scope.user.body,
-               mediaUrl: $scope.user.mediaUrl,
-          });
-  console.log(data)
 
-  $scope.sendPost = function (){
-    $http.post('/send', data, config).
-      success(function (dataC){
-        dataC = data 
-      console.log($scope.user)
-      console.log('posted successfully')
-    }).error(function(dataC){
+  
 
-      console.log('error in posting')
-    })
-   } 
+  // $scope.sendPost = function (){
+
+  //   console.log(data)
+  //   $http.post('/send', data, config).
+  //     success(function (data){
+  //     console.log(data)
+  //     console.log('posted successfully')
+  //   }).error(function(data){
+
+  //     console.log('error in posting')
+  //   })
+  //  }
+$scope.sendPost = function (){
+    var data = $.param({
+                to: $scope.user.to,
+                from: $scope.user.from,
+                messages: $scope.user.messages,
+                mediaUrl: $scope.user.mediaUrl,
+           });
+  var config = { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }         
+  $http.post('/send', data, config).then(function (data){
+    console.log(data)
+  }, function (err){
+    console.log(err)
+  });
+}
+   
+
+   // $scope.sendPost = function (){
+   //  console.log('hit')
+   //  $http({
+   //      method: "POST",
+   //      url: '/send',
+   //      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+   //      // data: $.param({
+   //      //         to: $scope.user.to,
+   //      //         from: $scope.user.from,
+   //      //         body: $scope.user.body,
+   //      //         mediaUrl: $scope.user.mediaUrl
+   //      //    })
+   //  data: {to: $scope.user.to}
+   //  }).success(function(result){
+   //      console.log(result);
+   //  });
+   // } 
       
  
-  
+ 
 }); 
 
     //$scope.reset();

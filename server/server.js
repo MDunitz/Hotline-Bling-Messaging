@@ -1,5 +1,6 @@
 var express = require('express')
 var accountSid = 'AC004e85a584d80f82ec78a1d8a38fa17a';
+var authToken = '2781dcfd7dace6a52d382d02ad3cd398'; 
 var client = require('twilio')(accountSid, authToken);
 var morgan = require('morgan')
 var http = require('http');
@@ -9,42 +10,64 @@ var bodyparser = require('body-parser')
 
 var app = express()
 
-app.set('port', 8081);
+app.set('port', 8080);
 console.log('-----')
 //console.log(path.normalize('/client/app/index.html'))
-app.use(express.static(path.normalize('/client/app/index.html')));
+app.use(express.static(path.join(__dirname, '../client/app')));
 //app.use(express.static(path.normalize(__dirname + '/')));
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({ extended: true }));
 
-app.listen(8081, function(err){
+
+// app.get('/', function(req, res){
+//   res.render('/client/app/index.html');
+
+// });
+var from;
+var to;
+var messages;
+var mediaUrl;
+
+app.post('/send', function(req, res){
+  from = req.body.from;
+  to = req.body.to;
+  messages = req.body.messages;
+  mediaUrl = req.body.mediaUrl;
+  console.log(req.body.from)
+  console.log(req.body.to)
+  console.log(req.body.messages)
+  console.log(req.body.mediaUrl)
+  res.send(to  + ": " + messages);
+
+
+  client.messages.create({ 
+      to: to, 
+      from: from, 
+      body: messages, 
+      mediaUrl: mediaUrl,  
+  }, function(err, message) { 
+      if(err){
+        console.log(err)
+      } else {
+        console.log(message); 
+      }
+      
+  });
+  });
+
+
+
+ 
+
+
+app.listen(8080, function(err){
   if(err){
     console.log(err)
   }
   console.log('app listening on port 8080!')
 })
 
-app.get('/', function(req, res){
-  res.render('/client/app/index.html');
 
-});
-
-app.post('/send', function(req, res){
-  console.log(req)
-  console.log(res)
-  res.end();
-})
-
-
- 
-client.messages.create({ 
-    to: "+17148550762", 
-    from: "+15627624447", 
-    body: "Hey Jenny! Good luck on the bar exam!", 
-    mediaUrl: "http://farm2.static.flickr.com/1075/1404618563_3ed9a44a3a.jpg",  
-}, function(err, message) { 
-    console.log(message.body); 
-});
 
 // client.sms.shortCodes("SC6b20cb705c1e8f00210049b20b70fce2").get(function(err, shortCode) {
 //     console.log(shortCode.shortCode);
