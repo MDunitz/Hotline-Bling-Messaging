@@ -1,6 +1,5 @@
 var express = require('express')
 var accountSid = 'AC004e85a584d80f82ec78a1d8a38fa17a';
-var authToken = '2781dcfd7dace6a52d382d02ad3cd398';
 var client = require('twilio')(accountSid, authToken);
 var morgan = require('morgan')
 var http = require('http');
