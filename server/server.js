@@ -6,7 +6,7 @@ var morgan = require('morgan')
 var http = require('http');
 var path = require('path')
 var bodyparser = require('body-parser')
-
+var Promise = require("bluebird");
 
 var app = express()
 
@@ -37,22 +37,29 @@ app.post('/send', function(req, res){
   console.log(req.body.to)
   console.log(req.body.messages)
   console.log(req.body.mediaUrl)
-  res.send(to  + ": " + messages);
+  
 
 
-  client.messages.create({ 
-      to: to, 
-      from: from, 
-      body: messages, 
-      mediaUrl: mediaUrl,  
-  }, function(err, message) { 
-      if(err){
-        console.log(err)
-      } else {
-        console.log(message); 
-      }
-      
-  });
+  if(from&&to&&messages&&mediaUrl){
+   client.messages.create({ 
+     to: "+"+to, 
+     from: "+"+from, 
+     body: messages, 
+     mediaUrl: mediaUrl,  
+ }, function(err, message) { 
+     if(err){
+       console.log(err)
+     } else {
+       console.log(message); 
+       res.send(to  + ": " + message);
+       res.end()
+     }
+     
+ });   
+  }
+ 
+
+
   });
 
 
